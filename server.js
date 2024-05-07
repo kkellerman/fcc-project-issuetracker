@@ -6,7 +6,7 @@ const expect      = require('chai').expect;
 const cors        = require('cors');
 require('dotenv').config();
 
-require("./connection");
+require("./connection"); // connect app to DB mongo
 
 const apiRoutes         = require('./routes/api.js');
 const fccTestingRoutes  = require('./routes/fcctesting.js');

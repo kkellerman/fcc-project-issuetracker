@@ -7,6 +7,12 @@ const projectSchema = new Schema({
     type: String,
     required: true,
   },
+  issues: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Issue",
+    },
+  ],
 });
 
 const Project = mongoose.model("Project", projectSchema);
