@@ -149,7 +149,26 @@ module.exports = function (app) {
     })
 
     //delete issue by id
-    .delete(function (req, res) {
-      let project = req.params.project;
+    .delete(async function (req, res) {
+      try {
+        const { _id } = req.body;
+
+        //Delete an issue with missing _id
+        if (!_id) {
+          return res.json({ error: "missing _id" });
+        }
+
+        const result = await IssueModel.findByIdAndDelete(_id);
+
+        //Delete an issue with an invalid _id
+        if (!result) {
+          return res.json({ error: "could not delete", _id: _id });
+        }
+
+        // Delete an issue
+        return res.json({ result: "successfully deleted", _id: _id });
+      } catch (error) {
+        res.status(500).json({ error: "Internal server error" });
+      }
     });
 };
