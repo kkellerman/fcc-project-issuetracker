@@ -3,9 +3,8 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const issueSchema = new Schema({
-  projectId: {
+  project: {
     type: String,
-    required: true,
   },
   issue_title: {
     type: String,
