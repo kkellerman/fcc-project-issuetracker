@@ -1,5 +1,7 @@
 "use strict";
 
+const mongoose = require("mongoose");
+const ObjectId = mongoose.Types.ObjectId;
 const IssueModel = require("../models/issue-model");
 
 module.exports = function (app) {
@@ -88,9 +90,62 @@ module.exports = function (app) {
     })
 
     //update issue by id
-    .put(function (req, res) {
-      const { _id, issue_title, issue_text, created_by, assigned_to, open, status_text } = req.body;
-      
+    .put(async function (req, res) {
+      const {
+        _id,
+        issue_title,
+        issue_text,
+        created_by,
+        assigned_to,
+        open,
+        status_text,
+      } = req.body;
+
+      // Update an issue with missing _id
+      if (!_id) {
+        return res.json({ error: "missing _id" });
+      }
+
+      const updatingIssue = {};
+
+      // Update one/multiple field on an issue
+      if (issue_title) {
+        updatingIssue.issue_title = issue_title;
+      } else if (issue_text) {
+        updatingIssue.issue_text = issue_text;
+      } else if (created_by) {
+        updatingIssue.created_by = created_by;
+      } else if (assigned_to) {
+        updatingIssue.assigned_to = assigned_to;
+      } else if (open) {
+        updatingIssue.open = open;
+      } else if (status_text) {
+        updatingIssue.status_text = status_text;
+      }
+
+      // Update an issue with no fields to update
+      if (Object.keys(updatingIssue).length === 0) {
+        return res.json({ error: "no update field(s) sent", _id: _id });
+      }
+
+      // Update an issue with an invalid _id
+      if (!ObjectId.isValid(_id)) {
+        return res.json({ error: "invalid _id" });
+      }
+
+      // update the updated_on date
+      updatingIssue.updated_on = new Date().toISOString();
+
+      // update an issue
+      const result = await IssueModel.findByIdAndUpdate(_id, updatingIssue, {
+        new: true,
+      });
+
+      if (!result) {
+        return res.json({ error: "could not update", _id: _id });
+      } else {
+        return res.json({ result: "successfully updated", _id: _id });
+      }
     })
 
     //delete issue by id
