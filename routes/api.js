@@ -56,9 +56,9 @@ module.exports = function (app) {
         created_by: req.body.created_by,
         created_on: new Date(),
         updated_on: new Date(),
-        assigned_to: req.body.assigned_to || "",
+        assigned_to: req.body.assigned_to || "", //Excluded optional fields will be returned as empty strings.
         open: true,
-        status_text: req.body.status_text || "",
+        status_text: req.body.status_text || "", // Excluded optional fields will be returned as empty strings.
       });
 
       if (
