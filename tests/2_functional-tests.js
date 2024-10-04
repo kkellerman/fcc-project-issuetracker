@@ -5,7 +5,7 @@ const server = require("../server");
 
 chai.use(chaiHttp);
 
-issueId = "663c051044809df1d83ab4e7"; // dummy_id
+issueId = "66ff57bb22f3ed7c65045ca9"; // dummy_id
 
 suite("Functional Tests", function () {
   suite("Test (GET) requests", function () {
